@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      background-color: #f0f0f0;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      background-color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas width="400" height="400">
+
+  </canvas>
+</body>
+
+<script>
+  var canvas = document.querySelector('canvas')
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d')
+    ctx.fillRect(0, 0, 100, 100)
+
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    var color = getPxInfo(imageData, 100, 100)
+    console.log(color)
+
+    for (var i = 0; i < imageData.width; i++) {
+      setPxInfo(imageData, i, 110, [0, 0, 0, 255])
+    }
+    ctx.putImageData(imageData, 0, 0)
+  }
+
+  // 获取单像素点
+  function getPxInfo(imageData, x, y) {
+    var color = []
+    var arr = imageData.data
+    var w = imageData.width
+    // R
+    color[0] = arr[(y * w + x) * 4]
+    // G
+    color[1] = arr[(y * w + x) * 4 + 1]
+    // B
+    color[2] = arr[(y * w + x) * 4 + 2]
+    // A
+    color[3] = arr[(y * w + x) * 4 + 3]
+    return color
+  }
+
+  // 设置单像素点
+  function setPxInfo(imageData, x, y, color) {
+    var arr = imageData.data
+    var w = imageData.width
+    // R
+    arr[(y * w + x) * 4] = color[0]
+    // G
+    arr[(y * w + x) * 4 + 1] = color[1]
+    // B
+    arr[(y * w + x) * 4 + 2] = color[2]
+    // A
+    arr[(y * w + x) * 4 + 3] = color[3]
+  }
+</script>
+
+</html>

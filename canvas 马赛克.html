@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    canvas {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: pink;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    var canvas = document.querySelector('canvas')
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d')
+
+      var img = new Image()
+      img.src = '/timg.jpg'
+      img.width = 300
+      img.height = 424
+      img.onload = function () {
+        canvas.width = img.width * 2
+        canvas.height = img.height
+        draw()
+      }
+
+      function draw() {
+        ctx.drawImage(img, 0, 0, img.width, img.height)
+
+        // 选取一个马赛克矩形
+        // 从马赛克矩形中随机抽取一个点(RGBA)信息
+        // 将整个马赛克矩形区域的像素点信息统一成随机抽取的那一个
+
+        // 选取一个马赛克矩形
+        var size = 10
+        var imageData = ctx.getImageData(0, 0, img.width, img.height)
+        var newImageData = ctx.createImageData(img.width, img.height)
+        for (var i = 0; i < imageData.width / size; i++) {
+          for (var j = 0; j < imageData.height / size; j++) {
+            // 从马赛克矩形中随机抽取一个点(RGBA)信息
+            var color = getPxInfo(imageData, i * size + Math.floor(Math.random() * size), j * size + Math.floor(Math.random() * size))
+            // 将整个马赛克矩形区域的像素点信息统一成随机抽取的那一个
+            for (var a = 0; a < size; a++) {
+              for (var b = 0; b < size; b++) {
+                setPxInfo(newImageData, i * size + a, j * size + b, color)
+              }
+            }
+          }
+        }
+
+        ctx.putImageData(newImageData, img.width, 0)
+      }
+
+      // 获取单像素点
+      function getPxInfo(imageData, x, y) {
+        var color = []
+        var arr = imageData.data
+        var w = imageData.width
+        // R
+        color[0] = arr[(y * w + x) * 4]
+        // G
+        color[1] = arr[(y * w + x) * 4 + 1]
+        // B
+        color[2] = arr[(y * w + x) * 4 + 2]
+        // A
+        color[3] = arr[(y * w + x) * 4 + 3]
+        return color
+      }
+
+      // 设置单像素点
+      function setPxInfo(imageData, x, y, color) {
+        var arr = imageData.data
+        var w = imageData.width
+        // R
+        arr[(y * w + x) * 4] = color[0]
+        // G
+        arr[(y * w + x) * 4 + 1] = color[1]
+        // B
+        arr[(y * w + x) * 4 + 2] = color[2]
+        // A
+        arr[(y * w + x) * 4 + 3] = color[3]
+      }
+    }
+  </script>
+</body>
+
+</html>

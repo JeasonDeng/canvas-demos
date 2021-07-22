@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      background-color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas width="400" height="400">
+
+  </canvas>
+</body>
+
+<script>
+  var canvas = document.querySelector('canvas')
+  // document.documentElement.clientWidth 获取视口宽度
+  canvas.width = document.documentElement.clientWidth
+  canvas.height = document.documentElement.clientHeight
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d')
+    var i = 0
+    var speed = 0
+
+    setInterval(function () {
+      i++
+      if (i === 9) {
+        i = 1
+      }
+      speed += 10
+      var img = new Image()
+      img.src = 'img/q_r' + i + '.jpg'
+      img.onload = function () {
+        draw(this)
+      }
+    }, 100)
+
+    function draw(img) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(img, speed, 0)
+    }
+
+
+  }
+</script>
+
+</html>

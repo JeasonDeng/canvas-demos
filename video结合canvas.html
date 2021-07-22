@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <video src="https://blz-videos.nosdn.127.net/1/OverWatch/AnimatedShots/Overwatch_AnimatedShot_Soldier76_Hero.mp4"
+     autoplay preload="metadata" width="0" height="0"></video>
+  <canvas width="400" height="400"></canvas>
+
+  <script>
+    var video = document.querySelector('video')
+    var canvas = document.querySelector('canvas')
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d')
+
+      video.addEventListener('loadeddata', function () {
+        setInterval(function () {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+        })
+      })
+    }
+  </script>
+</body>
+
+</html>
